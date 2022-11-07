@@ -1,0 +1,53 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: helloclient-np
+spec:
+  selector:
+    app: helloclient
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30081
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloclient
+  labels:
+    app: helloclient
+spec:
+  clusterIP: None
+  ports:
+    - port: 8080
+      name: helloclient
+  selector:
+    app: helloclient
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloclient
+spec:
+  selector:
+      matchLabels:
+        app: helloclient
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: helloclient
+    spec:
+      containers:
+        - name: helloclient
+          image: helloclient
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 8080
+          env:
+            - name: EUREKA_SERVER_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-cm
+                  key: eureka_service_address

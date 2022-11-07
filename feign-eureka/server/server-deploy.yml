@@ -1,0 +1,67 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: helloserver-np
+spec:
+  selector:
+    app: helloserver
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30082
+  type: NodePort
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: helloserver
+  labels:
+    app: helloserver
+spec:
+  clusterIP: None
+  ports:
+    - port: 8080
+      name: helloserver
+  selector:
+    app: helloserver
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: helloserver
+# spec:
+#   selector:
+#     app: helloserver
+#   ports:
+#     - port: 8080
+#       targetPort: 8080
+#   type: LoadBalancer
+#   clusterIP: ""
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: helloserver
+spec:
+  selector:
+      matchLabels:
+        app: helloserver
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: helloserver
+    spec:
+      containers:
+        - name: helloserver
+          image: helloserver
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 8080
+          env:
+            - name: EUREKA_SERVER_ADDRESS
+              valueFrom:
+                configMapKeyRef:
+                  name: eureka-cm
+                  key: eureka_service_address

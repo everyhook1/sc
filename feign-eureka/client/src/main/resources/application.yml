@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: HelloClient
+
+server:
+  port: 8080
+
+eureka:
+  password: password
+  client:
+    serviceUrl:
+      # defaultZone: http://user:${eureka.password}@${EUREKA_SERVER_ADDRESS:localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER_ADDRESS:localhost:8761/eureka/}
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}
+
+
+endpoints:
+  restart:
+    enabled: true
