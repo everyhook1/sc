@@ -1,0 +1,39 @@
+spring:
+  application:
+    name: gateway
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id:
+          uri: lb://HelloClient
+          predicates:
+            - Path=/HelloClient/**
+          filters:
+            - RewritePath=/HelloClient/(?<path>.*), /$\{path}
+        - id: department
+          uri: lb://HelloServer
+          predicates:
+            - Path=/HelloServer/**
+          filters:
+            - RewritePath=/HelloServer/(?<path>.*), /$\{path}
+logging:
+  pattern: 
+    console: "%d{yyyy-MM-dd HH:mm:ss} ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+
+eureka:
+  password: password
+  client:
+    serviceUrl:
+      # defaultZone: http://user:${eureka.password}@${EUREKA_SERVER_ADDRESS:localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER_ADDRESS:localhost:8761/eureka/}
+  instance:
+    preferIpAddress: true
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${spring.application.instance_id:${server.port}}}

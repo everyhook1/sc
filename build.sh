@@ -28,3 +28,12 @@ minikube image load helloserver:latest
 kubectl apply -f server-deploy.yml
 
 cd $cwd
+cd feign-eureka/gateway
+# mvn clean package
+docker build -t gateway .
+kubectl delete -f k8s/deployment.yml
+minikube image remove gateway
+minikube image load gateway:latest
+kubectl apply -f k8s/deployment.yml
+
+cd $cwd
