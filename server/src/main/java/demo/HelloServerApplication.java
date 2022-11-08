@@ -22,7 +22,7 @@ public class HelloServerApplication {
 	@Autowired
 	DiscoveryClient client;
 
-	@RequestMapping("/")
+	@RequestMapping("/HelloServer/v1/")
 	public String hello() {
 		List<ServiceInstance> instances = client.getInstances("HelloServer");
 		ServiceInstance selectedInstance = instances

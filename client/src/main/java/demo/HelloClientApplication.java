@@ -22,7 +22,7 @@ public class HelloClientApplication {
 	@Autowired
 	HelloClient client;
 
-	@RequestMapping("/")
+	@RequestMapping("/HelloClient/v1/")
 	public String hello() {
 		return client.hello();
 	}
@@ -33,7 +33,7 @@ public class HelloClientApplication {
 
 	@FeignClient("HelloServer")
 	interface HelloClient {
-		@RequestMapping(value = "/", method = GET)
+		@RequestMapping(value = "/HelloServer/v1/", method = GET)
 		String hello();
 	}
 }

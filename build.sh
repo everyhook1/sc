@@ -4,30 +4,28 @@ cwd=$(pwd)
 
 cd $cwd/eureka || return
 docker build -t eureka .
-kubectl delete -f eureka-deploy.yml
+kubectl delete -f deploy.yml
 minikube image remove eureka
 minikube image load eureka:latest
-kubectl apply -f eureka-deploy.yml
+kubectl apply -f deploy.yml
 
 cd $cwd/client || return
 docker build -t helloclient .
-kubectl delete -f client-deploy.yml
+kubectl delete -f deploy.yml
 minikube image remove helloclient
 minikube image load helloclient:latest
-kubectl apply -f client-deploy.yml
+kubectl apply -f deploy.yml
 
 cd $cwd/server || return
 docker build -t helloserver .
-kubectl delete -f server-deploy.yml
+kubectl delete -f deploy.yml
 minikube image remove helloserver
 minikube image load helloserver:latest
-kubectl apply -f server-deploy.yml
+kubectl apply -f deploy.yml
 
 cd $cwd/gateway || return
 docker build -t gateway .
-kubectl delete -f k8s/deployment.yaml
+kubectl delete -f deploy.yml
 minikube image remove gateway
 minikube image load gateway:latest
-kubectl apply -f k8s/deployment.yaml
-
-cd $cwd
+kubectl apply -f deploy.yml

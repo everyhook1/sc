@@ -30,7 +30,6 @@ eureka:
   password: password
   client:
     serviceUrl:
-      # defaultZone: http://user:${eureka.password}@${EUREKA_SERVER_ADDRESS:localhost:8761/eureka/}
       defaultZone: ${EUREKA_SERVER_ADDRESS:localhost:8761/eureka/}
   instance:
     preferIpAddress: true
